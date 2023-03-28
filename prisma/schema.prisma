@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Roles {
+  id    Int     @id @default(autoincrement())
+  role  String  @unique
+  Users Users[] @relation()
+}
+
+model Users {
+  id          Int     @id @default(autoincrement())
+  roleId      Int
+  login       String  @unique
+  password    String
+  name        String
+  lastName    String
+  photoLink   String?
+  description String?
+
+  Roles    Roles      @relation(fields: [roleId], references: [id])
+  Requests Requests[] @relation()
+}
+
+model DanceStyles {
+  id                 Int                  @id @default(autoincrement())
+  stile              String
+  description        String?
+  DescriptionsStyles DescriptionsStyles[]
+}
+
+model Descriptions {
+  id            Int     @id @default(autoincrement())
+  videoLink     String
+  styleId       Int
+  description   String?
+  price         Float
+  countOfPeople Int
+
+  MasterClasses      MasterClasses[]      @relation()
+  DescriptionsStyles DescriptionsStyles[]
+}
+
+model MasterClasses {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  descriptionId Int
+  evenDate      DateTime
+  place         String
+
+  Descriptions Descriptions @relation(fields: [descriptionId], references: [id])
+  Requests     Requests[]   @relation()
+}
+
+model Requests {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  classId     Int
+  createdDate DateTime
+
+  MasterClasses MasterClasses? @relation(fields: [classId], references: [id])
+  Users         Users          @relation(fields: [userId], references: [id])
+}
+
+model DescriptionsStyles {
+  description   Descriptions @relation(fields: [descriptionId], references: [id])
+  descriptionId Int
+  style DanceStyles @relation(fields: [styleId], references: [id])
+  styleId       Int
+  @@id([descriptionId, styleId])
+}
