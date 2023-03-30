@@ -6,6 +6,8 @@ import { RolesModule } from './roles/roles.module';
 import { PrismaModule } from 'nestjs-prisma';
 import { AuthModule } from './auth/auth.module';
 import { RedisModule } from './redis/redis.module';
+import { DanceStylesModule } from './dance-styles/dance-styles.module';
+import { MasterClassesModule } from './master-classes/master-classes.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { RedisModule } from './redis/redis.module';
     RolesModule,
     AuthModule,
     RedisModule,
+    DanceStylesModule,
+    MasterClassesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

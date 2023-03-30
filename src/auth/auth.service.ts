@@ -5,15 +5,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { LoginUserDto } from 'src/users/dto/login-user.dto';
-import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcript from 'bcrypt';
 import { Prisma, Users } from '@prisma/client';
-import { PrismaService } from 'nestjs-prisma';
-import { use } from 'passport';
 import { RedisClient } from '../redis/redis.client';
-import { RolesService } from '../roles/roles.service';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -23,8 +19,6 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private cacheManager: RedisClient,
-    private rolesService: RolesService,
-    private prisma: PrismaService,
   ) {}
 
   async login(loginUserDto: LoginUserDto) {
