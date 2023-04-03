@@ -4,7 +4,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { LoginUserDto } from 'src/users/dto/login-user.dto';
+import { LoginUserDto } from 'src/auth/dto/login-user.dto';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcript from 'bcrypt';
@@ -12,6 +12,7 @@ import { Prisma, Users } from '@prisma/client';
 import { RedisClient } from '../redis/redis.client';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -25,6 +26,7 @@ export class AuthService {
     const user = await this.validateUser(loginUserDto);
     return this.generateTokens(user);
   }
+
   private async validateUser(loginUserDto: LoginUserDto) {
     const user = await this.usersService.getUserByLogin(loginUserDto.login);
     if (user !== null) {
@@ -39,7 +41,7 @@ export class AuthService {
     throw new UnauthorizedException({ message: 'Uncorrect login or password' });
   }
 
-  async registration(createUser: Prisma.UsersCreateInput) {
+  async registration(createUser: CreateUserDto) {
     const candidate = await this.usersService.getUserByLogin(createUser.login);
     if (candidate) {
       throw new HttpException(

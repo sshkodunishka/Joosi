@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Req } from '@nestjs/common';
-import { LoginUserDto } from '../users/dto/login-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { Prisma, Users } from '@prisma/client';
@@ -15,7 +15,7 @@ export class AuthController {
   }
 
   @Post('/registration')
-  registration(@Body() createUserDto: Prisma.UsersCreateInput) {
+  registration(@Body() createUserDto: CreateUserDto) {
     return this.authService.registration(createUserDto);
   }
 

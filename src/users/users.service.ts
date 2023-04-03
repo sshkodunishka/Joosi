@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Prisma, Users } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { RolesService } from '../roles/roles.service';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -10,10 +11,17 @@ export class UsersService {
     private rolesService: RolesService,
   ) {}
 
-  async createUser(data: Prisma.UsersCreateInput): Promise<Users> {
+  async createUser(data: CreateUserDto): Promise<Users> {
     const role = await this.rolesService.getRoleByValue('user');
     return this.prisma.users.create({
-      data: { ...data, Roles: { connect: { id: role.id } } },
+      data: {
+        roleId: role.id,
+        login: data.login,
+        password: data.password,
+        name: data.name,
+        lastName: data.lastName,
+        description: data.description,
+      },
     });
   }
 
