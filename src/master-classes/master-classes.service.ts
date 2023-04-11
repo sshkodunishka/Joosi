@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { MasterClasses, Prisma } from '@prisma/client';
+import { Descriptions, MasterClasses, Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
+import { CreateClassDto } from './dto/create-class.dto';
 
 @Injectable()
 export class MasterClassesService {
@@ -10,17 +11,11 @@ export class MasterClassesService {
     return this.prisma.masterClasses.findMany();
   }
 
-  async addClass(
-    masterClass: MasterClasses,
-    userId: number,
-  ): Promise<MasterClasses> {
-    return this.prisma.masterClasses.create({
-      data: {
-        userId: userId,
-        evenDate: masterClass.evenDate,
-        place: masterClass.place,
-        descriptionId: masterClass.descriptionId,
-      },
+  async addClass(masterClass: CreateClassDto, userId: number) {
+    const newClass = await this.prisma.masterClasses.create({
+      data: { userId: userId, ...masterClass },
     });
+
+    return newClass;
   }
 }

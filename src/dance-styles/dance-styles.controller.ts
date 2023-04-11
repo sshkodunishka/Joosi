@@ -14,9 +14,9 @@ export class DanceStylesController {
     return this.danceStylesService.getAllStyles();
   }
 
-  @UseGuards(JwtAuthGuard)
   @UseGuards(RolesGuard)
   @Roles('admin')
+  @UseGuards(JwtAuthGuard)
   @Post('/cteateStyle')
   async addStyle(@Body() style: Prisma.DanceStylesCreateInput) {
     return this.danceStylesService.addStyle(style);

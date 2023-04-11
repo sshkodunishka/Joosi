@@ -26,38 +26,41 @@ model Users {
   photoLink   String?
   description String?
 
-  Roles    Roles      @relation(fields: [roleId], references: [id])
-  Requests Requests[] @relation()
+  Roles         Roles           @relation(fields: [roleId], references: [id])
+  Requests      Requests[]      @relation()
+  MasterClasses MasterClasses[] @relation()
 }
 
 model DanceStyles {
   id                 Int                  @id @default(autoincrement())
-  stile              String
+  style              String
   description        String?
   DescriptionsStyles DescriptionsStyles[]
 }
 
-model Descriptions {
-  id            Int     @id @default(autoincrement())
-  videoLink     String
-  styleId       Int
-  description   String?
-  price         Float
-  countOfPeople Int
+model MasterClasses {
+  id          Int     @id @default(autoincrement())
+  userId      Int
+  videoLink   String
+  styleId     Int
+  description String?
+  price       Float
 
-  MasterClasses      MasterClasses[]      @relation()
-  DescriptionsStyles DescriptionsStyles[]
+  Descriptions Descriptions[] @relation()
+  Requests     Requests[]     @relation()
+  Users        Users?         @relation(fields: [userId], references: [id])
 }
 
-model MasterClasses {
+model Descriptions {
   id            Int      @id @default(autoincrement())
-  userId        Int
-  descriptionId Int
+  classId       Int
+  nameClass     String
   evenDate      DateTime
   place         String
+  countOfPeople Int
 
-  Descriptions Descriptions @relation(fields: [descriptionId], references: [id])
-  Requests     Requests[]   @relation()
+  MasterClasses      MasterClasses        @relation(fields: [classId], references: [id])
+  DescriptionsStyles DescriptionsStyles[]
 }
 
 model Requests {
@@ -73,7 +76,8 @@ model Requests {
 model DescriptionsStyles {
   description   Descriptions @relation(fields: [descriptionId], references: [id])
   descriptionId Int
-  style DanceStyles @relation(fields: [styleId], references: [id])
+  style         DanceStyles  @relation(fields: [styleId], references: [id])
   styleId       Int
+
   @@id([descriptionId, styleId])
 }

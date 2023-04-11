@@ -3,6 +3,7 @@ import { Prisma, Users } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { RolesService } from '../roles/roles.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { Roles } from '../roles/roles.decorator';
 
 @Injectable()
 export class UsersService {
@@ -27,6 +28,12 @@ export class UsersService {
 
   async getAllUsers(): Promise<Users[] | null> {
     return await this.prisma.users.findMany();
+  }
+
+  async getAllUsersByRole(roleName: string): Promise<Users[] | null> {
+    return await this.prisma.users.findMany({
+      where: { Roles: { role: roleName } },
+    });
   }
 
   async getUserByLogin(login: string): Promise<Users | null> {

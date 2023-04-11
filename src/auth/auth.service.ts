@@ -13,6 +13,7 @@ import { RedisClient } from '../redis/redis.client';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
 export class AuthService {
@@ -20,6 +21,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private cacheManager: RedisClient,
+    private prisma: PrismaService,
   ) {}
 
   async login(loginUserDto: LoginUserDto) {
@@ -81,7 +83,10 @@ export class AuthService {
   }
 
   private async generateTokens(user: Users) {
-    const payload = { login: user.login, id: user.id, roleId: user.roleId };
+    const role = await this.prisma.roles.findUnique({
+      where: { id: user.roleId },
+    });
+    const payload = { login: user.login, id: user.id, role: role.role };
     const refresh_token = uuidv4();
     await this.cacheManager.set(refresh_token, user.id, {});
     await this.cacheManager.set(user.id.toString(), refresh_token, {});
