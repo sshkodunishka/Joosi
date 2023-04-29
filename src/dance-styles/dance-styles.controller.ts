@@ -15,7 +15,7 @@ export class DanceStylesController {
   }
 
   @UseGuards(RolesGuard)
-  @Roles('admin')
+  @Roles(['admin'])
   @UseGuards(JwtAuthGuard)
   @Post('/cteateStyle')
   async addStyle(@Body() style: Prisma.DanceStylesCreateInput) {

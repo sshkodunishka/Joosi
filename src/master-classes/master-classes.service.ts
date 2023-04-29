@@ -11,9 +11,16 @@ export class MasterClassesService {
     return this.prisma.masterClasses.findMany();
   }
 
-  async addClass(masterClass: CreateClassDto, userId: number) {
+  async addClass(masterClass: CreateClassDto, creatorId: number) {
     const newClass = await this.prisma.masterClasses.create({
-      data: { userId: userId, ...masterClass },
+      data: {
+        creatorId: creatorId,
+        title: masterClass.title,
+        videoLink: masterClass.videoLink,
+        imageLink: masterClass.imageLink,
+        description: masterClass.description,
+        price: masterClass.price,
+      },
     });
 
     return newClass;

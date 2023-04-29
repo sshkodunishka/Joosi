@@ -32,35 +32,35 @@ model Users {
 }
 
 model DanceStyles {
-  id                 Int                  @id @default(autoincrement())
-  style              String
-  description        String?
-  DescriptionsStyles DescriptionsStyles[]
+  id            Int             @id @default(autoincrement())
+  style         String
+  description   String?
+  ClassesStyles ClassesStyles[]
 }
 
 model MasterClasses {
   id          Int     @id @default(autoincrement())
-  userId      Int
-  videoLink   String
-  styleId     Int
+  title       String
+  creatorId   Int
+  videoLink   String?
+  imageLink   String?
   description String?
   price       Float
 
-  Descriptions Descriptions[] @relation()
-  Requests     Requests[]     @relation()
-  Users        Users?         @relation(fields: [userId], references: [id])
+  Descriptions  Descriptions[]  @relation()
+  Requests      Requests[]      @relation()
+  Users         Users?          @relation(fields: [creatorId], references: [id])
+  ClassesStyles ClassesStyles[]
 }
 
 model Descriptions {
-  id            Int      @id @default(autoincrement())
-  classId       Int
-  nameClass     String
+  id      Int @id @default(autoincrement())
+  classId Int
   evenDate      DateTime
   place         String
   countOfPeople Int
 
-  MasterClasses      MasterClasses        @relation(fields: [classId], references: [id])
-  DescriptionsStyles DescriptionsStyles[]
+  MasterClasses MasterClasses @relation(fields: [classId], references: [id])
 }
 
 model Requests {
@@ -73,11 +73,11 @@ model Requests {
   Users         Users          @relation(fields: [userId], references: [id])
 }
 
-model DescriptionsStyles {
-  description   Descriptions @relation(fields: [descriptionId], references: [id])
-  descriptionId Int
-  style         DanceStyles  @relation(fields: [styleId], references: [id])
-  styleId       Int
+model ClassesStyles {
+  classId Int
+  style   DanceStyles   @relation(fields: [styleId], references: [id])
+  styleId Int
+  classes MasterClasses @relation(fields: [classId], references: [id])
 
-  @@id([descriptionId, styleId])
+  @@id([classId, styleId])
 }

@@ -21,7 +21,7 @@ export class UsersController {
   }
 
   @UseGuards(RolesGuard)
-  @Roles('admin')
+  @Roles(['admin'])
   @UseGuards(JwtAuthGuard)
   @Post('/becomeChoreographer')
   async becomeChoreographer(@Body() user: Users) {

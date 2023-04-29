@@ -6,7 +6,7 @@ import { RolesGuard } from '../roles/roles.guards';
 import { Roles } from '../roles/roles.decorator';
 import { CreateClassDto } from './dto/create-class.dto';
 
-@Controller('masterClasses')
+@Controller('master-classes')
 export class MasterClassesController {
   constructor(private readonly masterClassesService: MasterClassesService) {}
 
@@ -15,11 +15,11 @@ export class MasterClassesController {
     return this.masterClassesService.getAllClasses();
   }
 
-  // @UseGuards(RolesGuard)
-  // @Roles('admin', 'choreographer')
-  // @UseGuards(JwtAuthGuard)
-  // @Post('/createClass')
-  // async addClass(@Body() masterClass: CreateClassDto, @Req() req: any) {
-  //   return this.masterClassesService.addClass(masterClass, req.user.id);
-  // }
+  @UseGuards(RolesGuard)
+  @Roles(['admin', 'choreographer'])
+  @UseGuards(JwtAuthGuard)
+  @Post('/create-class')
+  async addClass(@Body() masterClass: CreateClassDto, @Req() req: any) {
+    return this.masterClassesService.addClass(masterClass, req.user.id);
+  }
 }
