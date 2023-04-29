@@ -74,3 +74,4 @@ Nest is [MIT licensed](LICENSE).
 # Joosi
 
 For migration: npx prisma migrate dev --name update
+npx prisma generate
