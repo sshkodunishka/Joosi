@@ -8,7 +8,20 @@ export class DescriptionsService {
   constructor(private prisma: PrismaService) {}
 
   async getAllDescriptions(): Promise<Descriptions[]> {
-    return await this.prisma.descriptions.findMany();
+    return await this.prisma.descriptions.findMany({
+      include: {
+        MasterClasses: {
+          include: {
+            Users: { select: { name: true, lastName: true, photoLink: true } },
+            ClassesStyles: {
+              include: {
+                style: true,
+              },
+            },
+          },
+        },
+      },
+    });
   }
 
   async addDescription(

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Users, Users as UsersModel } from '@prisma/client';
 import { JwtAuthGuard } from '../auth/jwt-auth.guards';
@@ -13,6 +13,13 @@ export class UsersController {
   @Get()
   async getAllUsers(): Promise<UsersModel[]> {
     return this.usersService.getAllUsers();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/profile')
+  async getUser(@Req() req): Promise<UsersModel> {
+    console.log(req.user);
+    return this.usersService.getUserByLogin(req.user.login);
   }
 
   @Get('/choreographers')

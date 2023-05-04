@@ -13,4 +13,7 @@ export class CreateClassDto {
 
   @IsNotEmpty()
   readonly price: number;
+
+  @IsNotEmpty()
+  readonly danceStyles: string[];
 }

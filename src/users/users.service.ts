@@ -4,6 +4,7 @@ import { PrismaService } from 'nestjs-prisma';
 import { RolesService } from '../roles/roles.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Roles } from '../roles/roles.decorator';
+import * as request from 'supertest';
 
 @Injectable()
 export class UsersService {
