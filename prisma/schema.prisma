@@ -48,29 +48,29 @@ model MasterClasses {
   price       Float
 
   Descriptions  Descriptions[]  @relation()
-  Requests      Requests[]      @relation()
   Users         Users?          @relation(fields: [creatorId], references: [id])
   ClassesStyles ClassesStyles[]
 }
 
 model Descriptions {
-  id      Int @id @default(autoincrement())
-  classId Int
+  id            Int      @id @default(autoincrement())
+  classId       Int
   evenDate      DateTime
   place         String
   countOfPeople Int
 
   MasterClasses MasterClasses @relation(fields: [classId], references: [id])
+  Requests      Requests[]
 }
 
 model Requests {
-  id          Int      @id @default(autoincrement())
-  userId      Int
-  classId     Int
-  createdDate DateTime
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  descriptionId Int
+  createdDate   DateTime
 
-  MasterClasses MasterClasses? @relation(fields: [classId], references: [id])
-  Users         Users          @relation(fields: [userId], references: [id])
+  Descriptions Descriptions? @relation(fields: [descriptionId], references: [id])
+  Users        Users         @relation(fields: [userId], references: [id])
 }
 
 model ClassesStyles {

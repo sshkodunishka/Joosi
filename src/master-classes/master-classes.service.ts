@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { MasterClasses, Requests } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { CreateClassDto } from './dto/create-class.dto';
@@ -74,5 +74,57 @@ export class MasterClassesService {
     });
 
     return newClass;
+  }
+
+  async updateClass(
+    id: number,
+    masterClass: CreateClassDto,
+    creatorId: number,
+  ) {
+    const checkClass = await this.prisma.masterClasses.findUnique({
+      where: { id: +id },
+    });
+    if (creatorId === checkClass.creatorId) {
+      return await this.prisma.masterClasses.update({
+        where: { id: +id },
+        data: {
+          title: masterClass.title,
+          videoLink: masterClass.videoLink,
+          imageLink: masterClass.imageLink,
+          description: masterClass.description,
+          price: masterClass.price,
+        },
+      });
+    } else {
+      throw new UnauthorizedException({ message: 'user has no rights' });
+    }
+  }
+
+  async deleteClass(id: number, creatorId: number) {
+    const checkClass = await this.prisma.masterClasses.findUnique({
+      where: { id: +id },
+    });
+    const descriptions = await this.prisma.descriptions.findMany({
+      where: { classId: +id },
+    });
+    const descriptionIds = [];
+    descriptions.forEach((description) => {
+      descriptionIds.push(description.id);
+    });
+    if (creatorId === checkClass.creatorId) {
+      await this.prisma.classesStyles.deleteMany({ where: { classId: +id } });
+      await this.prisma.descriptions.deleteMany({ where: { classId: +id } });
+      await this.prisma.requests.deleteMany({
+        where: {
+          descriptionId: {
+            in: descriptionIds,
+          },
+        },
+      });
+      await this.prisma.masterClasses.delete({ where: { id: +id } });
+      return 'Delted';
+    } else {
+      throw new UnauthorizedException({ message: 'user has no rights' });
+    }
   }
 }

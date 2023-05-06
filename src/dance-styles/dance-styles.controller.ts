@@ -14,7 +14,7 @@ import { RolesGuard } from '../roles/roles.guards';
 import { Roles } from '../roles/roles.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guards';
 
-@Controller('danceStyles')
+@Controller('dance-styles')
 export class DanceStylesController {
   constructor(private readonly danceStylesService: DanceStylesService) {}
 

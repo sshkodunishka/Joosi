@@ -26,6 +26,9 @@ export class DanceStylesService {
   }
 
   async deleteStyle(id: number) {
-    return this.prisma.danceStyles.delete({ where: { id: +id } });
+    return this.prisma.danceStyles.delete({
+      where: { id: +id },
+      include: { ClassesStyles: true },
+    });
   }
 }

@@ -10,6 +10,7 @@
   - You are about to drop the column `evenDate` on the `MasterClasses` table. All the data in the column will be lost.
   - You are about to drop the column `place` on the `MasterClasses` table. All the data in the column will be lost.
   - You are about to drop the column `userId` on the `MasterClasses` table. All the data in the column will be lost.
+  - You are about to drop the column `classId` on the `Requests` table. All the data in the column will be lost.
   - You are about to drop the `DescriptionsStyles` table. If the table is not empty, all the data it contains will be lost.
   - Added the required column `style` to the `DanceStyles` table without a default value. This is not possible if the table is not empty.
   - Added the required column `classId` to the `Descriptions` table without a default value. This is not possible if the table is not empty.
@@ -18,6 +19,7 @@
   - Added the required column `creatorId` to the `MasterClasses` table without a default value. This is not possible if the table is not empty.
   - Added the required column `price` to the `MasterClasses` table without a default value. This is not possible if the table is not empty.
   - Added the required column `title` to the `MasterClasses` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `descriptionId` to the `Requests` table without a default value. This is not possible if the table is not empty.
 
 */
 -- DropForeignKey
@@ -28,6 +30,9 @@ ALTER TABLE "DescriptionsStyles" DROP CONSTRAINT "DescriptionsStyles_styleId_fke
 
 -- DropForeignKey
 ALTER TABLE "MasterClasses" DROP CONSTRAINT "MasterClasses_descriptionId_fkey";
+
+-- DropForeignKey
+ALTER TABLE "Requests" DROP CONSTRAINT "Requests_classId_fkey";
 
 -- AlterTable
 ALTER TABLE "DanceStyles" DROP COLUMN "stile",
@@ -54,6 +59,10 @@ ADD COLUMN     "price" DOUBLE PRECISION NOT NULL,
 ADD COLUMN     "title" TEXT NOT NULL,
 ADD COLUMN     "videoLink" TEXT;
 
+-- AlterTable
+ALTER TABLE "Requests" DROP COLUMN "classId",
+ADD COLUMN     "descriptionId" INTEGER NOT NULL;
+
 -- DropTable
 DROP TABLE "DescriptionsStyles";
 
@@ -70,6 +79,9 @@ ALTER TABLE "MasterClasses" ADD CONSTRAINT "MasterClasses_creatorId_fkey" FOREIG
 
 -- AddForeignKey
 ALTER TABLE "Descriptions" ADD CONSTRAINT "Descriptions_classId_fkey" FOREIGN KEY ("classId") REFERENCES "MasterClasses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Requests" ADD CONSTRAINT "Requests_descriptionId_fkey" FOREIGN KEY ("descriptionId") REFERENCES "Descriptions"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ClassesStyles" ADD CONSTRAINT "ClassesStyles_styleId_fkey" FOREIGN KEY ("styleId") REFERENCES "DanceStyles"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

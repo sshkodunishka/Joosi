@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
+  Put,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -38,8 +40,28 @@ export class MasterClassesController {
   @UseGuards(RolesGuard)
   @Roles(['user', 'choreographer'])
   @UseGuards(JwtAuthGuard)
-  @Post('/:id/:requests')
+  @Post('/:id/requests')
   async addRequest(@Param('id') id: number, @Req() req: any) {
     return this.requestsService.addRequest(req.user.login, id);
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles(['user', 'choreographer'])
+  @UseGuards(JwtAuthGuard)
+  @Put('/:id')
+  async updateClass(
+    @Body() masterClass: CreateClassDto,
+    @Param('id') id: number,
+    @Req() req: any,
+  ) {
+    return this.masterClassesService.updateClass(id, masterClass, req.user.id);
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles(['user', 'choreographer'])
+  @UseGuards(JwtAuthGuard)
+  @Delete('/:id')
+  async deleteClass(@Param('id') id: number, @Req() req: any) {
+    return this.masterClassesService.deleteClass(id, req.user.id);
   }
 }
