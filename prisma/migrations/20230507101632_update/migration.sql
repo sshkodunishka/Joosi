@@ -3,7 +3,6 @@
 
   - You are about to drop the column `stile` on the `DanceStyles` table. All the data in the column will be lost.
   - You are about to drop the column `description` on the `Descriptions` table. All the data in the column will be lost.
-  - You are about to drop the column `price` on the `Descriptions` table. All the data in the column will be lost.
   - You are about to drop the column `styleId` on the `Descriptions` table. All the data in the column will be lost.
   - You are about to drop the column `videoLink` on the `Descriptions` table. All the data in the column will be lost.
   - You are about to drop the column `descriptionId` on the `MasterClasses` table. All the data in the column will be lost.
@@ -14,10 +13,9 @@
   - You are about to drop the `DescriptionsStyles` table. If the table is not empty, all the data it contains will be lost.
   - Added the required column `style` to the `DanceStyles` table without a default value. This is not possible if the table is not empty.
   - Added the required column `classId` to the `Descriptions` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `evenDate` to the `Descriptions` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `eventDate` to the `Descriptions` table without a default value. This is not possible if the table is not empty.
   - Added the required column `place` to the `Descriptions` table without a default value. This is not possible if the table is not empty.
   - Added the required column `creatorId` to the `MasterClasses` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `price` to the `MasterClasses` table without a default value. This is not possible if the table is not empty.
   - Added the required column `title` to the `MasterClasses` table without a default value. This is not possible if the table is not empty.
   - Added the required column `descriptionId` to the `Requests` table without a default value. This is not possible if the table is not empty.
 
@@ -40,11 +38,10 @@ ADD COLUMN     "style" TEXT NOT NULL;
 
 -- AlterTable
 ALTER TABLE "Descriptions" DROP COLUMN "description",
-DROP COLUMN "price",
 DROP COLUMN "styleId",
 DROP COLUMN "videoLink",
 ADD COLUMN     "classId" INTEGER NOT NULL,
-ADD COLUMN     "evenDate" TIMESTAMP(3) NOT NULL,
+ADD COLUMN     "eventDate" TIMESTAMP(3) NOT NULL,
 ADD COLUMN     "place" TEXT NOT NULL;
 
 -- AlterTable
@@ -55,7 +52,6 @@ DROP COLUMN "userId",
 ADD COLUMN     "creatorId" INTEGER NOT NULL,
 ADD COLUMN     "description" TEXT,
 ADD COLUMN     "imageLink" TEXT,
-ADD COLUMN     "price" DOUBLE PRECISION NOT NULL,
 ADD COLUMN     "title" TEXT NOT NULL,
 ADD COLUMN     "videoLink" TEXT;
 

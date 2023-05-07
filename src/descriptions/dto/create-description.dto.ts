@@ -8,8 +8,11 @@ export class CreateDescriptionDto {
   readonly countOfPeople: number;
 
   @IsNotEmpty()
-  readonly evenDate: Date;
+  readonly eventDate: Date;
 
   @IsNotEmpty()
   readonly place: string;
+
+  @IsNotEmpty()
+  readonly price: number;
 }

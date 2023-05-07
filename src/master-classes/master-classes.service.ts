@@ -16,13 +16,13 @@ export class MasterClassesService {
         videoLink: true,
         imageLink: true,
         description: true,
-        price: true,
         Descriptions: {
           select: {
             id: true,
-            evenDate: true,
+            eventDate: true,
             place: true,
             countOfPeople: true,
+            price: true,
           },
         },
         Users: {
@@ -42,17 +42,6 @@ export class MasterClassesService {
   }
 
   async addClass(masterClass: CreateClassDto, creatorId: number) {
-    const styleIds = await this.prisma.danceStyles.findMany({
-      where: {
-        style: {
-          in: masterClass.danceStyles,
-        },
-      },
-      select: {
-        id: true,
-      },
-    });
-
     const newClass = await this.prisma.masterClasses.create({
       data: {
         creatorId: creatorId,
@@ -60,14 +49,13 @@ export class MasterClassesService {
         videoLink: masterClass.videoLink,
         imageLink: masterClass.imageLink,
         description: masterClass.description,
-        price: masterClass.price,
       },
     });
 
-    styleIds.forEach(async (id) => {
+    masterClass.danceStylesId.forEach(async (id) => {
       await this.prisma.classesStyles.create({
         data: {
-          styleId: id.id,
+          styleId: id,
           classId: newClass.id,
         },
       });
@@ -92,7 +80,6 @@ export class MasterClassesService {
           videoLink: masterClass.videoLink,
           imageLink: masterClass.imageLink,
           description: masterClass.description,
-          price: masterClass.price,
         },
       });
     } else {

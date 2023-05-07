@@ -29,11 +29,71 @@ export class DescriptionsService {
   async getAllCurrentDescriptions(): Promise<Descriptions[]> {
     const today = new Date();
     return await this.prisma.descriptions.findMany({
-      where: { evenDate: { gte: today } },
+      where: { eventDate: { gte: today } },
       include: {
         MasterClasses: {
           include: {
-            Users: { select: { name: true, lastName: true, photoLink: true } },
+            Users: {
+              select: { id: true, name: true, lastName: true, photoLink: true },
+            },
+            ClassesStyles: {
+              include: {
+                style: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  async getAllCurrentDescriptionsByChoreographer(
+    creatorId: number,
+  ): Promise<Descriptions[]> {
+    const today = new Date();
+    return await this.prisma.descriptions.findMany({
+      where: {
+        eventDate: { gte: today },
+        MasterClasses: { creatorId: +creatorId },
+      },
+      include: {
+        MasterClasses: {
+          include: {
+            Users: {
+              select: { id: true, name: true, lastName: true, photoLink: true },
+            },
+            ClassesStyles: {
+              include: {
+                style: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  async getAllCurrentDescriptionsByStyle(
+    idStyle: number,
+  ): Promise<Descriptions[]> {
+    const today = new Date();
+    return await this.prisma.descriptions.findMany({
+      where: {
+        eventDate: { gte: today },
+        MasterClasses: {
+          ClassesStyles: {
+            some: {
+              styleId: +idStyle,
+            },
+          },
+        },
+      },
+      include: {
+        MasterClasses: {
+          include: {
+            Users: {
+              select: { id: true, name: true, lastName: true, photoLink: true },
+            },
             ClassesStyles: {
               include: {
                 style: true,

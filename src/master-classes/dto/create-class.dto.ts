@@ -12,8 +12,5 @@ export class CreateClassDto {
   readonly description: string;
 
   @IsNotEmpty()
-  readonly price: number;
-
-  @IsNotEmpty()
-  readonly danceStyles: string[];
+  readonly danceStylesId: number[];
 }

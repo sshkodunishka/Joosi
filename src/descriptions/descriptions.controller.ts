@@ -25,6 +25,22 @@ export class DescriptionsController {
     return this.descriptionsService.getAllCurrentDescriptions();
   }
 
+  @Get('/dance-styles/:id')
+  async getAllDescriptionsByStyle(
+    @Param('id') id: number,
+  ): Promise<Descriptions[]> {
+    return this.descriptionsService.getAllCurrentDescriptionsByStyle(id);
+  }
+
+  @Get('/choreographers/:id')
+  async getAllDescriptionsByChoreographer(
+    @Param('id') id: number,
+  ): Promise<Descriptions[]> {
+    return this.descriptionsService.getAllCurrentDescriptionsByChoreographer(
+      id,
+    );
+  }
+
   @UseGuards(RolesGuard)
   @Roles(['admin', 'choreographer'])
   @UseGuards(JwtAuthGuard)

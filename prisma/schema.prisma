@@ -45,7 +45,6 @@ model MasterClasses {
   videoLink   String?
   imageLink   String?
   description String?
-  price       Float
 
   Descriptions  Descriptions[]  @relation()
   Users         Users?          @relation(fields: [creatorId], references: [id])
@@ -55,9 +54,10 @@ model MasterClasses {
 model Descriptions {
   id            Int      @id @default(autoincrement())
   classId       Int
-  evenDate      DateTime
+  eventDate      DateTime
   place         String
   countOfPeople Int
+  price         Float
 
   MasterClasses MasterClasses @relation(fields: [classId], references: [id])
   Requests      Requests[]
