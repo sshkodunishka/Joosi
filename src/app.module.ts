@@ -10,6 +10,7 @@ import { DanceStylesModule } from './dance-styles/dance-styles.module';
 import { MasterClassesModule } from './master-classes/master-classes.module';
 import { RequestsModule } from './requests/requests.module';
 import { DescriptionsModule } from './descriptions/descriptions.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { DescriptionsModule } from './descriptions/descriptions.module';
     RequestsModule,
     MasterClassesModule,
     DescriptionsModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
