@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Users, Users as UsersModel } from '@prisma/client';
 import { JwtAuthGuard } from '../auth/jwt-auth.guards';
@@ -25,6 +33,11 @@ export class UsersController {
   @Get('/choreographers')
   async getAllChareographers(): Promise<UsersModel[]> {
     return this.usersService.getAllUsersByRole('choreographer');
+  }
+
+  @Get('/choreographers/:id')
+  async getChareographerById(@Param('id') id: number): Promise<UsersModel> {
+    return this.usersService.getChoreographerById(id);
   }
 
   @UseGuards(RolesGuard)

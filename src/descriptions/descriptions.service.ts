@@ -26,10 +26,31 @@ export class DescriptionsService {
     return description;
   }
 
-  async getAllCurrentDescriptions(): Promise<Descriptions[]> {
+  async getAllCurrentDescriptions({
+    danceStyleId,
+    choreographerId,
+  }: {
+    danceStyleId?: number;
+    choreographerId?: number;
+  }): Promise<Descriptions[]> {
     const today = new Date();
+    const optionalWhereSection: any = {};
+    if (danceStyleId) {
+      optionalWhereSection.MasterClasses = {
+        ClassesStyles: {
+          some: {
+            styleId: +danceStyleId,
+          },
+        },
+      };
+    }
+
+    if (choreographerId) {
+      optionalWhereSection.MasterClasses = { creatorId: +choreographerId };
+    }
+
     return await this.prisma.descriptions.findMany({
-      where: { eventDate: { gte: today } },
+      where: { ...optionalWhereSection, eventDate: { gte: today } },
       include: {
         MasterClasses: {
           include: {

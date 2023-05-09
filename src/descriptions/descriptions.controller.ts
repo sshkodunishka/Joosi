@@ -26,8 +26,14 @@ export class DescriptionsController {
   ) {}
 
   @Get()
-  async getAllDescriptions(): Promise<Descriptions[]> {
-    return this.descriptionsService.getAllCurrentDescriptions();
+  async getAllDescriptions(
+    @Query('danceStyleId') danceStyleId: number,
+    @Query('choreographerId') choreographerId: number,
+  ): Promise<Descriptions[]> {
+    return this.descriptionsService.getAllCurrentDescriptions({
+      danceStyleId,
+      choreographerId,
+    });
   }
 
   @Get('choreographers')

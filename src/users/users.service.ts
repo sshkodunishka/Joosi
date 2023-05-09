@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma, Users } from '@prisma/client';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Prisma, Users, DanceStyles } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { RolesService } from '../roles/roles.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -51,6 +51,20 @@ export class UsersService {
       include: { Roles: true },
     });
     return user;
+  }
+
+  async getChoreographerById(id: number): Promise<Users | null> {
+    const user = await this.prisma.users.findUnique({
+      where: { id: +id },
+      include: { Roles: true },
+    });
+    if (user.Roles.role === 'choreographer') {
+      return user;
+    } else {
+      throw new UnauthorizedException({
+        message: 'there is no such choreographer',
+      });
+    }
   }
 
   async becomeChoreographer(user: Users): Promise<Users> {
