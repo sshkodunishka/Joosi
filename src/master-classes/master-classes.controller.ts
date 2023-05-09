@@ -29,6 +29,11 @@ export class MasterClassesController {
     return this.masterClassesService.getAllClasses();
   }
 
+  @Get('/:id')
+  async getClassById(@Param('id') id: number): Promise<MasterClasses> {
+    return this.masterClassesService.getClassById(id);
+  }
+
   @UseGuards(RolesGuard)
   @Roles(['admin', 'choreographer'])
   @UseGuards(JwtAuthGuard)

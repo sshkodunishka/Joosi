@@ -41,6 +41,41 @@ export class MasterClassesService {
     });
   }
 
+  async getClassById(id: number): Promise<MasterClasses> {
+    return this.prisma.masterClasses.findUnique({
+      where: { id: +id },
+      select: {
+        id: true,
+        title: true,
+        creatorId: true,
+        videoLink: true,
+        imageLink: true,
+        description: true,
+        Descriptions: {
+          select: {
+            id: true,
+            eventDate: true,
+            place: true,
+            countOfPeople: true,
+            price: true,
+          },
+        },
+        Users: {
+          select: {
+            roleId: true,
+            name: true,
+            lastName: true,
+          },
+        },
+        ClassesStyles: {
+          select: {
+            style: true,
+          },
+        },
+      },
+    });
+  }
+
   async addClass(masterClass: CreateClassDto, creatorId: number) {
     const newClass = await this.prisma.masterClasses.create({
       data: {
