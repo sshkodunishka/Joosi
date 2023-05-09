@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -25,20 +26,21 @@ export class DescriptionsController {
     return this.descriptionsService.getAllCurrentDescriptions();
   }
 
-  @Get('/dance-styles/:id')
-  async getAllDescriptionsByStyle(
-    @Param('id') id: number,
-  ): Promise<Descriptions[]> {
-    return this.descriptionsService.getAllCurrentDescriptionsByStyle(id);
-  }
-
-  @Get('/choreographers/:id')
+  @Get('choreographers')
   async getAllDescriptionsByChoreographer(
-    @Param('id') id: number,
+    @Query('id') id: number,
   ): Promise<Descriptions[]> {
+    console.log(id);
     return this.descriptionsService.getAllCurrentDescriptionsByChoreographer(
       id,
     );
+  }
+
+  @Get('/dance-styles')
+  async getAllDescriptionsByStyle(
+    @Query('id') id: number,
+  ): Promise<Descriptions[]> {
+    return this.descriptionsService.getAllCurrentDescriptionsByStyle(id);
   }
 
   @UseGuards(RolesGuard)
