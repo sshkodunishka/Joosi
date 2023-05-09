@@ -16,10 +16,14 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guards';
 import { Roles } from 'src/roles/roles.decorator';
 import { RolesGuard } from 'src/roles/roles.guards';
 import { CreateDescriptionDto } from './dto/create-description.dto';
+import { RequestsService } from '../requests/requests.service';
 
 @Controller('descriptions')
 export class DescriptionsController {
-  constructor(private readonly descriptionsService: DescriptionsService) {}
+  constructor(
+    private readonly descriptionsService: DescriptionsService,
+    private readonly requestsService: RequestsService,
+  ) {}
 
   @Get()
   async getAllDescriptions(): Promise<Descriptions[]> {
@@ -52,6 +56,14 @@ export class DescriptionsController {
     @Req() req: any,
   ) {
     return this.descriptionsService.addDescription(description, req.user.id);
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles(['user', 'choreographer'])
+  @UseGuards(JwtAuthGuard)
+  @Post('/:id/requests')
+  async addRequest(@Param('id') id: number, @Req() req: any) {
+    return this.requestsService.addRequest(req.user.login, id);
   }
 
   @UseGuards(RolesGuard)

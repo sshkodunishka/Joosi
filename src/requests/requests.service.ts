@@ -43,8 +43,8 @@ export class RequestsService {
     });
     const user = await this.usersService.getUserById(request.userId);
     if (user.login === userLogin) {
-      await this.prisma.descriptions.updateMany({
-        where: { id: id },
+      await this.prisma.descriptions.update({
+        where: { id: request.descriptionId },
         data: {
           countOfPeople: {
             increment: 1,

@@ -19,10 +19,7 @@ import { RequestsService } from '../requests/requests.service';
 
 @Controller('master-classes')
 export class MasterClassesController {
-  constructor(
-    private readonly masterClassesService: MasterClassesService,
-    private readonly requestsService: RequestsService,
-  ) {}
+  constructor(private readonly masterClassesService: MasterClassesService) {}
 
   @Get()
   async getAllClasses(): Promise<MasterClasses[]> {
@@ -40,14 +37,6 @@ export class MasterClassesController {
   @Post()
   async addClass(@Body() masterClass: CreateClassDto, @Req() req: any) {
     return this.masterClassesService.addClass(masterClass, req.user.id);
-  }
-
-  @UseGuards(RolesGuard)
-  @Roles(['user', 'choreographer'])
-  @UseGuards(JwtAuthGuard)
-  @Post('/:id/requests')
-  async addRequest(@Param('id') id: number, @Req() req: any) {
-    return this.requestsService.addRequest(req.user.login, id);
   }
 
   @UseGuards(RolesGuard)
