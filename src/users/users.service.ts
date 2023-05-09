@@ -28,7 +28,7 @@ export class UsersService {
   }
 
   async getAllUsers(): Promise<Users[] | null> {
-    return await this.prisma.users.findMany();
+    return await this.prisma.users.findMany({ include: { Roles: true } });
   }
 
   async getAllUsersByRole(roleName: string): Promise<Users[] | null> {
@@ -56,7 +56,15 @@ export class UsersService {
   async getChoreographerById(id: number): Promise<Users | null> {
     const user = await this.prisma.users.findUnique({
       where: { id: +id },
-      include: { Roles: true },
+      include: {
+        Roles: true,
+        MasterClasses: {
+          include: {
+            Descriptions: true,
+            ClassesStyles: { include: { style: true } },
+          },
+        },
+      },
     });
     if (user.Roles.role === 'choreographer') {
       return user;

@@ -35,6 +35,10 @@ export class DescriptionsController {
       choreographerId,
     });
   }
+  @Get('/:id')
+  async getDescriptionById(@Param('id') id: number): Promise<Descriptions> {
+    return this.descriptionsService.getDescriptionById(id);
+  }
 
   @Get('choreographers')
   async getAllDescriptionsByChoreographer(

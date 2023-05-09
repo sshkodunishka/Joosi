@@ -126,6 +126,27 @@ export class DescriptionsService {
     });
   }
 
+  async getDescriptionById(id: number): Promise<Descriptions> {
+    return await this.prisma.descriptions.findUnique({
+      where: { id: +id },
+      include: {
+        MasterClasses: {
+          include: {
+            Users: {
+              select: { id: true, name: true, lastName: true, photoLink: true },
+            },
+            ClassesStyles: {
+              include: {
+                style: true,
+              },
+            },
+          },
+        },
+        Requests: true,
+      },
+    });
+  }
+
   async addDescription(
     description: CreateDescriptionDto,
     creatorId: number,

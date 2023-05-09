@@ -6,6 +6,10 @@ import { PrismaService } from 'nestjs-prisma';
 export class RolesService {
   constructor(private prisma: PrismaService) {}
 
+  async getAllRoles(): Promise<Roles[]> {
+    return await this.prisma.roles.findMany();
+  }
+
   async getRoleByValue(roleName: string): Promise<Roles> {
     return await this.prisma.roles.findUnique({ where: { role: roleName } });
   }
