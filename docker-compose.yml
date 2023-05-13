@@ -1,6 +1,20 @@
 version: '4.6.13'
 
 services:
+  app: 
+    container_name: app
+    build: .
+    env_file: 
+      - .development.env
+    ports: 
+      - 5000:5000
+      - 5001:5001
+    networks:
+      - joosi
+    depends_on:
+      - postgres_cp
+      - redis_cp
+
   postgres_cp:
     container_name: postgres_cp
     image: postgres:15

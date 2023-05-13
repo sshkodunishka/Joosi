@@ -1,11 +1,15 @@
-FROM node:18.12.1
+FROM node:18
 
-COPY . /app
+WORKDIR /usr/src/app
 
-COPY package*.json ./app
+COPY package.json ./
 
-WORKDIR /app
+RUN npm i
 
-RUN npm install
+COPY . .
 
-CMD ["npm", "run", "start:dev"]
+RUN npx prisma generate
+
+RUN npm run build
+
+CMD [ "node", "dist/src/main.js" ]
