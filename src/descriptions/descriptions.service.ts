@@ -1,14 +1,16 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { DanceStyles, Descriptions, Prisma } from '@prisma/client';
+import { Descriptions } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { CreateDescriptionDto } from './dto/create-description.dto';
-
 @Injectable()
 export class DescriptionsService {
   constructor(private prisma: PrismaService) {}
 
   async getAllDescriptions(): Promise<Descriptions[]> {
     const description = await this.prisma.descriptions.findMany({
+      orderBy: {
+        eventDate: 'desc',
+      },
       include: {
         MasterClasses: {
           include: {
@@ -50,6 +52,9 @@ export class DescriptionsService {
     }
 
     return await this.prisma.descriptions.findMany({
+      orderBy: {
+        eventDate: 'desc',
+      },
       where: { ...optionalWhereSection, eventDate: { gte: today } },
       include: {
         MasterClasses: {
@@ -68,11 +73,61 @@ export class DescriptionsService {
     });
   }
 
+  async getUserDescriptions(userId: number, role: string) {
+    let whereSection: any = {};
+    if (role === 'choreographer') {
+      whereSection = {
+        MasterClasses: {
+          creatorId: userId,
+        },
+      };
+    } else {
+      whereSection = {
+        Requests: {
+          some: {
+            userId,
+          },
+        },
+      };
+    }
+    return await this.prisma.descriptions.findMany({
+      where: whereSection,
+      orderBy: {
+        eventDate: 'desc',
+      },
+      include: {
+        Requests: {
+          select: { userId: true },
+        },
+        MasterClasses: {
+          include: {
+            Users: {
+              select: {
+                id: true,
+                name: true,
+                lastName: true,
+                photoLink: true,
+              },
+            },
+            ClassesStyles: {
+              include: {
+                style: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
   async getAllCurrentDescriptionsByChoreographer(
     creatorId: number,
   ): Promise<Descriptions[]> {
     const today = new Date();
     return await this.prisma.descriptions.findMany({
+      orderBy: {
+        eventDate: 'desc',
+      },
       where: {
         eventDate: { gte: today },
         MasterClasses: { creatorId: +creatorId },
@@ -99,6 +154,9 @@ export class DescriptionsService {
   ): Promise<Descriptions[]> {
     const today = new Date();
     return await this.prisma.descriptions.findMany({
+      orderBy: {
+        eventDate: 'desc',
+      },
       where: {
         eventDate: { gte: today },
         MasterClasses: {

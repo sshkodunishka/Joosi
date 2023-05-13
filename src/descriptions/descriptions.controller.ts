@@ -35,6 +35,23 @@ export class DescriptionsController {
       choreographerId,
     });
   }
+
+  @Get('user')
+  @UseGuards(JwtAuthGuard)
+  async getUserDescriptions(@Req() req: any): Promise<Descriptions[]> {
+    return this.descriptionsService.getUserDescriptions(req.user.id, 'user');
+  }
+
+  @Get('choreographer')
+  @Roles(['choreographer'])
+  @UseGuards(JwtAuthGuard)
+  async getCreatedDescriptions(@Req() req: any): Promise<Descriptions[]> {
+    return this.descriptionsService.getUserDescriptions(
+      req.user.id,
+      'choreographer',
+    );
+  }
+
   @Get('/:id')
   async getDescriptionById(@Param('id') id: number): Promise<Descriptions> {
     return this.descriptionsService.getDescriptionById(id);
@@ -44,7 +61,6 @@ export class DescriptionsController {
   async getAllDescriptionsByChoreographer(
     @Query('id') id: number,
   ): Promise<Descriptions[]> {
-    console.log(id);
     return this.descriptionsService.getAllCurrentDescriptionsByChoreographer(
       id,
     );

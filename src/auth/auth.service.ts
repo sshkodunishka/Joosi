@@ -8,7 +8,7 @@ import { LoginUserDto } from 'src/auth/dto/login-user.dto';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcript from 'bcrypt';
-import { Prisma, Users } from '@prisma/client';
+import { Users } from '@prisma/client';
 import { RedisClient } from '../redis/redis.client';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { v4 as uuidv4 } from 'uuid';

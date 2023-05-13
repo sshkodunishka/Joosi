@@ -10,7 +10,6 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.use(cookieParser());
   app.enableCors();
-  console.log(process.env);
   await app.listen(PORT, () => console.log(`Сервер зарущен на порте ${PORT}`));
 }
 bootstrap();

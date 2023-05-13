@@ -19,7 +19,7 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getAllUsers(): Promise<UsersModel[]> {
+  async getAllUsers(): Promise<Omit<UsersModel, 'password'>[]> {
     return this.usersService.getAllUsers();
   }
 
@@ -27,7 +27,7 @@ export class UsersController {
   @Get('/profile')
   async getUser(@Req() req): Promise<UsersModel> {
     console.log(req.user);
-    return this.usersService.getUserByLogin(req.user.login);
+    return this.usersService.getUserById(req.user.id);
   }
 
   @Get('/choreographers')

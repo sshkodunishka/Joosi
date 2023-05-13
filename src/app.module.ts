@@ -16,6 +16,11 @@ import { FilesModule } from './files/files.module';
   imports: [
     PrismaModule.forRoot({
       isGlobal: true,
+      prismaServiceOptions: {
+        prismaOptions: {
+          log: ['query', 'info', 'warn', 'error'],
+        },
+      },
     }),
     UsersModule,
     RolesModule,

@@ -43,6 +43,14 @@ export class UsersService {
   async getAllUsersByRole(roleName: string): Promise<Users[] | null> {
     return await this.prisma.users.findMany({
       where: { Roles: { role: roleName } },
+      include: {
+        MasterClasses: {
+          include: {
+            Descriptions: true,
+            ClassesStyles: { include: { style: true } },
+          },
+        },
+      },
     });
   }
 
@@ -59,6 +67,7 @@ export class UsersService {
       where: { id: id },
       include: { Roles: true },
     });
+    delete user.password;
     return user;
   }
 
@@ -76,6 +85,7 @@ export class UsersService {
       },
     });
     if (user.Roles.role === 'choreographer') {
+      delete user.password;
       return user;
     } else {
       throw new UnauthorizedException({
@@ -94,6 +104,7 @@ export class UsersService {
         roleId: role.id,
       },
     });
+    delete choreographer.password;
     return choreographer;
   }
 }
