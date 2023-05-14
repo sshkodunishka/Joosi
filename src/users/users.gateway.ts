@@ -12,9 +12,8 @@ import { UsersService } from './users.service';
 
 @Injectable()
 @WebSocketGateway(5001, {
-  cors: {
-    origin: '*',
-  },
+  path: '/api/websocket',
+  cors: '*:*',
 })
 export class UsersGateway {
   constructor(private userService: UsersService) {}
