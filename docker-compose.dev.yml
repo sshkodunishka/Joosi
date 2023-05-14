@@ -3,7 +3,7 @@ version: '4.6.13'
 services:
   app: 
     container_name: app
-    image: shkodunishka/joosi:v2
+    image: shkodunishka/joosi:v4
     env_file: 
       - .development.env
     ports: 
@@ -18,7 +18,7 @@ services:
   
   front:
     container_name: front
-    image: shkodunishka/joosi_fe:v3
+    image: shkodunishka/joosi_fe:v4
     ports:
       - 3000:80
     networks:
