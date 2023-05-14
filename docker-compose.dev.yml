@@ -17,7 +17,7 @@ services:
   
   front:
     container_name: front
-    image: shkodunishka/joosi_fe:v2
+    image: shkodunishka/joosi_fe:v3
     ports:
       - 3000:80
     networks:
