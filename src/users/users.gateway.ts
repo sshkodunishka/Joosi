@@ -11,7 +11,7 @@ import { WsJwtAuthGuard } from 'src/auth/jwt-auth-ws.guards';
 import { UsersService } from './users.service';
 
 @Injectable()
-@WebSocketGateway(5001, {
+@WebSocketGateway({
   path: '/api/websocket',
   cors: '*:*',
 })
