@@ -225,16 +225,17 @@ export class DescriptionsService {
     creatorId: number,
     description: CreateDescriptionDto,
   ) {
-    console.log(creatorId);
     const masterClass = await this.prisma.masterClasses.findUnique({
       where: { id: description.classId },
     });
-    console.log(masterClass.creatorId);
     if (creatorId === masterClass.creatorId) {
       return await this.prisma.descriptions.update({
         where: { id: +id },
         data: {
-          ...description,
+          eventDate: description.eventDate,
+          place: description.place,
+          price: description.price,
+          countOfPeople: description.countOfPeople,
         },
       });
     } else {
@@ -245,11 +246,21 @@ export class DescriptionsService {
   async deleteDescription(id: number, creatorId: number) {
     const description = await this.prisma.descriptions.findUnique({
       where: { id: +id },
+      include: {
+        Requests: true,
+      },
     });
     const masterClass = await this.prisma.masterClasses.findUnique({
       where: { id: description.classId },
     });
     if (creatorId === masterClass.creatorId) {
+      for (const request of description.Requests) {
+        await this.prisma.requests.delete({
+          where: {
+            id: request.id,
+          },
+        });
+      }
       return await this.prisma.descriptions.delete({ where: { id: +id } });
     } else {
       throw new UnauthorizedException({ message: 'user has no rights' });

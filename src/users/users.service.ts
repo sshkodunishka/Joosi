@@ -3,6 +3,7 @@ import { Prisma, Users, DanceStyles } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { RolesService } from '../roles/roles.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto, UpdateUserImamgeDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -106,5 +107,42 @@ export class UsersService {
     });
     delete choreographer.password;
     return choreographer;
+  }
+
+  async updateProfile(userId: number, userDto: UpdateUserDto): Promise<Users> {
+    const user = await this.prisma.users.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        name: userDto.name,
+        lastName: userDto.lastName,
+        description: userDto.description,
+      },
+      include: {
+        Roles: true,
+      },
+    });
+    delete user.password;
+    return user;
+  }
+
+  async updateProfileImage(
+    userId: number,
+    userDto: UpdateUserImamgeDto,
+  ): Promise<Users> {
+    const user = await this.prisma.users.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        photoLink: userDto.photoLink,
+      },
+      include: {
+        Roles: true,
+      },
+    });
+    delete user.password;
+    return user;
   }
 }

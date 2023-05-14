@@ -11,6 +11,7 @@ services:
       - 5001:5001
     networks:
       - joosi
+    restart: always
     depends_on:
       - postgres_cp
       - redis_cp

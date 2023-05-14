@@ -28,7 +28,8 @@ export class MasterClassesController {
 
   @Get('/:id')
   async getClassById(@Param('id') id: number): Promise<MasterClasses> {
-    return this.masterClassesService.getClassById(id);
+    const masterlass = await this.masterClassesService.getClassById(id);
+    return masterlass;
   }
 
   @UseGuards(RolesGuard)

@@ -42,7 +42,7 @@ export class MasterClassesService {
   }
 
   async getClassById(id: number): Promise<MasterClasses> {
-    return this.prisma.masterClasses.findUnique({
+    return await this.prisma.masterClasses.findUnique({
       where: { id: +id },
       select: {
         id: true,
@@ -108,7 +108,7 @@ export class MasterClassesService {
       where: { id: +id },
     });
     if (creatorId === checkClass.creatorId) {
-      return await this.prisma.masterClasses.update({
+      await this.prisma.masterClasses.update({
         where: { id: +id },
         data: {
           title: masterClass.title,
@@ -117,6 +117,29 @@ export class MasterClassesService {
           description: masterClass.description,
         },
       });
+      const classStyles = await this.prisma.classesStyles.findMany({
+        where: {
+          classId: +id,
+        },
+      });
+      for (const classStyle of classStyles) {
+        await this.prisma.classesStyles.delete({
+          where: {
+            classId_styleId: {
+              classId: classStyle.classId,
+              styleId: classStyle.styleId,
+            },
+          },
+        });
+      }
+      for (const danceStyleId of masterClass.danceStylesId) {
+        await this.prisma.classesStyles.create({
+          data: {
+            styleId: danceStyleId,
+            classId: checkClass.id,
+          },
+        });
+      }
     } else {
       throw new UnauthorizedException({ message: 'user has no rights' });
     }
