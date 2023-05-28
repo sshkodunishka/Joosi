@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { DescriptionsService } from './descriptions.service';
-import { Descriptions } from '@prisma/client';
+import { Descriptions, Users } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guards';
 import { Roles } from 'src/roles/roles.decorator';
 import { RolesGuard } from 'src/roles/roles.guards';
@@ -50,6 +50,17 @@ export class DescriptionsController {
       req.user.id,
       'choreographer',
     );
+  }
+
+  @Get('/:id/requests')
+  @Roles(['choreographer'])
+  @UseGuards(JwtAuthGuard)
+  async getRequestsByDescriptionId(@Param('id') id: number, @Req() req: any) {
+    const users = await this.descriptionsService.getRequestsByDescriptionId(
+      id,
+      req.user.id,
+    );
+    return users;
   }
 
   @Get('/:id')

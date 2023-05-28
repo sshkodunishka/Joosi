@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { MasterClasses, Requests } from '@prisma/client';
+import { MasterClasses, Requests, Users } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { CreateClassDto } from './dto/create-class.dto';
 

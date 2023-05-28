@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { Descriptions } from '@prisma/client';
+import { Descriptions, Users } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { CreateDescriptionDto } from './dto/create-description.dto';
 @Injectable()
@@ -203,6 +203,36 @@ export class DescriptionsService {
         Requests: true,
       },
     });
+  }
+
+  async getRequestsByDescriptionId(
+    descriptionId: number,
+    choreographerId: number,
+  ) {
+    const description = await this.prisma.descriptions.findUnique({
+      where: { id: +descriptionId },
+      include: {
+        MasterClasses: true,
+      },
+    });
+    if (description.MasterClasses.creatorId === choreographerId) {
+      return await this.prisma.users.findMany({
+        where: {
+          Requests: {
+            some: {
+              descriptionId: +descriptionId,
+            },
+          },
+        },
+        select: {
+          name: true,
+          lastName: true,
+          photoLink: true,
+        },
+      });
+    } else {
+      throw new UnauthorizedException({ message: 'user has no rights' });
+    }
   }
 
   async addDescription(
