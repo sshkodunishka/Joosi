@@ -2,7 +2,6 @@ import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { LoginUserDto } from './dto/login-user.dto';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { AuthService } from './auth.service';
-import { Prisma, Users } from '@prisma/client';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Controller('auth')

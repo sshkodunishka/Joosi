@@ -1,4 +1,3 @@
-import { Descriptions } from '@prisma/client';
 import { IsNotEmpty } from 'class-validator';
 
 export class CreateClassDto {

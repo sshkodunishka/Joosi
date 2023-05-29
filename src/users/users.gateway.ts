@@ -9,6 +9,7 @@ import {
 } from '@nestjs/websockets';
 import { WsJwtAuthGuard } from 'src/auth/jwt-auth-ws.guards';
 import { UsersService } from './users.service';
+import { Users } from '@prisma/client';
 
 @Injectable()
 @WebSocketGateway({
@@ -18,6 +19,10 @@ import { UsersService } from './users.service';
 export class UsersGateway {
   constructor(private userService: UsersService) {}
   @WebSocketServer() server;
+  messages: {
+    user: Users;
+    message: string;
+  }[] = [];
 
   @SubscribeMessage('message')
   @UseGuards(WsJwtAuthGuard)
@@ -30,6 +35,13 @@ export class UsersGateway {
       user,
       message: data,
     };
+    this.messages.push(message);
     this.server.emit('message', message);
+  }
+
+  @SubscribeMessage('history')
+  @UseGuards(WsJwtAuthGuard)
+  async getAllMessage(@ConnectedSocket() clientSocket: any) {
+    clientSocket.emit('history', this.messages);
   }
 }
